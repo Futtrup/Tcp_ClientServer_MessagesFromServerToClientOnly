@@ -24,13 +24,14 @@ namespace Server
             _server_ListenerThread.IsBackground = true;
             _server_ListenerThread.Start();
 
+            string msgToClients;
             while (true)
             {
-                _server.Send_MessageToClients(DateTime.Now.ToString());
+                msgToClients = DateTime.Now.ToString();
+                Console.WriteLine($"Sending message to clients:{msgToClients}");
+                _server.Send_MessageToClients(msgToClients);
                 Thread.Sleep(5000);
             }
-
-            //Console.ReadLine();
         }
     }
 }

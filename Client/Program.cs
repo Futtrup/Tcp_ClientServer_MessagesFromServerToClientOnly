@@ -8,11 +8,17 @@ namespace Client
 {
     class Program
     {
+        private static string _ip = "127.0.0.1";
         private static int _port = 8006;
+        private static Client _client;
 
         static void Main(string[] args)
         {
             Console.WriteLine("Hello from client...");
+
+            _client = new Client(_ip, _port);
+            _client.LogEvent += (s, e) => Console.WriteLine(e);
+            _client.Start_Client();
 
             Console.ReadLine();
         }

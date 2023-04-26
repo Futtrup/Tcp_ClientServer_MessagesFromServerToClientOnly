@@ -14,26 +14,26 @@ namespace Server
         // Public
         public event EventHandler<string> LogEvent;
 
-        public TcpClient[] GetClients()
+        public TcpClient[] Get_Clients()
         {
             lock (_lock) return _clients.ToArray();
         }
-        public int GetClientCount()
+        public int Get_ClientCount()
         {
             lock (_lock) return _clients.Count;
         }
-        public void RemoveClient(TcpClient client)
+        public void Remove_Client(TcpClient client)
         {
             lock (_lock) _clients.Remove(client);
             Log($"Client disconnected: {client.Client.RemoteEndPoint}");
-            LogClientsConnected();
+            Log_ClientsConnected();
         }
 
-        public void AddClient(TcpClient client)
+        public void Add_Client(TcpClient client)
         {
             lock (_lock) _clients.Add(client);
             Log($"Client connected: {client.Client.RemoteEndPoint}");
-            LogClientsConnected();
+            Log_ClientsConnected();
         }
 
         // Private
@@ -63,7 +63,7 @@ namespace Server
                 try
                 {
                     TcpClient client = _listener.AcceptTcpClient();
-                    AddClient(client);
+                    Add_Client(client);
                 }
                 catch (Exception ex)
                 {
@@ -92,24 +92,22 @@ namespace Server
             int res = 0;
             try
             {
-                if (GetClientCount() == 0)
+                if (Get_ClientCount() == 0)
                     return res;
 
-                foreach (var c in GetClients())
+                StreamWriter sw;
+                foreach (var c in Get_Clients())
                 {
                     try
                     {
-                        using (var sw = new StreamWriter(c.GetStream()))
-                        {
-                            sw.WriteLine(msg);
-                            //sw.Flush();
-                        }
-
+                        sw = new StreamWriter(c.GetStream());
+                        sw.WriteLine(msg);
+                        sw.Flush();
                         res++;
                     }
                     catch
                     {
-                        RemoveClient(c);
+                        Remove_Client(c);
                     }
                 }
             }
@@ -121,10 +119,10 @@ namespace Server
         }
 
 
-        private void LogClientsConnected()
+        private void Log_ClientsConnected()
         {
-            Log($"Clients connected: {GetClientCount()}");
-            foreach (var c in GetClients())
+            Log($"Clients connected: {Get_ClientCount()}");
+            foreach (var c in Get_Clients())
                 Log($"{c.Client.RemoteEndPoint}");
         }
 
