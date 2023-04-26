@@ -30,7 +30,7 @@ namespace Server
                 msgToClients = DateTime.Now.ToString();
                 Console.WriteLine($"Sending message to clients:{msgToClients}");
                 _server.Send_MessageToClients(msgToClients);
-                Thread.Sleep(5000);
+                Thread.Sleep(5 * 1000);
             }
         }
     }

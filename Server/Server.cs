@@ -95,12 +95,12 @@ namespace Server
                 if (Get_ClientCount() == 0)
                     return res;
 
-                StreamWriter sw;
+
                 foreach (var c in Get_Clients())
                 {
                     try
                     {
-                        sw = new StreamWriter(c.GetStream());
+                        StreamWriter sw = new StreamWriter(c.GetStream());
                         sw.WriteLine(msg);
                         sw.Flush();
                         res++;

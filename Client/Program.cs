@@ -18,6 +18,7 @@ namespace Client
 
             _client = new Client(_ip, _port);
             _client.LogEvent += (s, e) => Console.WriteLine(e);
+            _client.LastReceivedData_Timeout += (s, e) => Console.WriteLine("Client timeout event occured");
             _client.Start_Client();
 
             Console.ReadLine();
